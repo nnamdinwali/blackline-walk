@@ -39,3 +39,12 @@ For Android, use an Android device/emulator with Expo tooling. iOS native builds
 ## Important next implementation phase
 
 The current UI is a real working foundation. The next native phase should add a background step counter, GPS distance sampling, server-validated territory geofencing, three-consecutive-day claim transactions, and scheduled local notifications. These require device testing and should not be faked from the client.
+
+## Google sign-in setup
+
+The app now includes a real Google OAuth button using Supabase Auth. In the Supabase dashboard, enable the Google provider with the Google OAuth web client ID/secret, and add these redirect URLs:
+
+- `https://8081-ihjia1840rg0pwpj8wks2-9bec1e95.us4.manus.computer/`
+- `blacklinewalk://auth/callback`
+
+The app uses the `blacklinewalk` native scheme for Android/iOS callbacks. Google OAuth cannot complete until the provider credentials are entered in Supabase.
