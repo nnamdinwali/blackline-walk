@@ -168,12 +168,53 @@ export default function App() {
 }
 
 function LandingScreen({ email, setEmail, busy, onGoogle, onSignUp }: { email: string; setEmail: (value: string) => void; busy: boolean; onGoogle: () => void; onSignUp: () => void }) {
-  return <View style={styles.platformLanding}>
-    <View style={styles.platformHero}><Text style={styles.platformEyebrow}>BLACKLINE / PLAYGROUND ECONOMY</Text><Text style={styles.platformTitle}>Move more.{`\n`}Earn your way.</Text><Text style={styles.platformCopy}>A real-world activity platform where your movement unlocks progress, rewards, and ground you can call yours.</Text><View style={styles.platformStatRow}><View><Text style={styles.platformStat}>01</Text><Text style={styles.platformStatLabel}>WALK DAILY</Text></View><View><Text style={styles.platformStat}>03</Text><Text style={styles.platformStatLabel}>DAYS TO CLAIM</Text></View><View><Text style={styles.platformStat}>∞</Text><Text style={styles.platformStatLabel}>ROOM TO GROW</Text></View></View></View>
-    <View style={styles.platformPanel}><View style={styles.panelTop}><Text style={styles.panelTitle}>JOIN BLACKLINE</Text><Text style={styles.panelMeta}>FREE ACCESS</Text></View><Pressable style={styles.googleButton} onPress={onGoogle}><Text style={styles.googleMark}>G</Text><Text style={styles.googleText}>{busy ? 'CONNECTING…' : 'CONTINUE WITH GOOGLE'}</Text><Text style={styles.googleArrow}>↗</Text></Pressable><View style={styles.divider}><View style={styles.dividerLine} /><Text style={styles.dividerText}>OR USE EMAIL</Text><View style={styles.dividerLine} /></View><TextInput value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" placeholder="Email address" placeholderTextColor="#777" style={styles.platformInput} /><Pressable style={styles.emailButton} onPress={onSignUp}><Text style={styles.emailButtonText}>{busy ? 'SENDING…' : 'CREATE ACCOUNT'}</Text><Text style={styles.emailArrow}>→</Text></Pressable><Text style={styles.terms}>By continuing, you agree to the Blackline terms and privacy policy.</Text><Text style={styles.loginHint}>Already have an account? <Text style={styles.loginLink}>Log in</Text></Text></View>
-    <View style={styles.platformFooter}><Text style={styles.footerBrand}>BLACKLINE</Text><Text style={styles.footerNote}>TURN MOVEMENT INTO MOMENTUM.</Text></View>
-  </View>;
+  return (
+    <View style={styles.platformLanding}>
+      <View style={styles.platformHero}>
+        <Text style={styles.platformEyebrow}>BLACKLINE</Text>
+        <Text style={styles.platformTitle}>Walk more.{"\n"}Own the miles.</Text>
+        <Text style={styles.platformCopy}>
+          Turn daily movement into territory you can claim. Walk, hold for three days, and keep what you earn.
+        </Text>
+      </View>
+
+      <View style={styles.platformPanel}>
+        <Pressable style={styles.googleButton} onPress={onGoogle} disabled={busy}>
+          <Text style={styles.googleMark}>G</Text>
+          <Text style={styles.googleText}>{busy ? "Connecting…" : "Continue with Google"}</Text>
+        </Pressable>
+
+        <View style={styles.divider}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>OR</Text>
+          <View style={styles.dividerLine} />
+        </View>
+
+        <TextInput
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+          placeholder="Email address"
+          placeholderTextColor="#666"
+          style={styles.platformInput}
+        />
+
+        <Pressable style={styles.emailButton} onPress={onSignUp} disabled={busy}>
+          <Text style={styles.emailButtonText}>{busy ? "Sending…" : "Continue"}</Text>
+        </Pressable>
+
+        <Text style={styles.terms}>
+          By continuing you agree to Blackline terms and privacy policy.
+        </Text>
+        <Text style={styles.loginHint}>
+          Already have an account? <Text style={styles.loginLink}>Sign in</Text>
+        </Text>
+      </View>
+    </View>
+  );
 }
+
 
 function WalkScreen({ today, totalSteps, locationReady, onLocation, onTerritories }: { today: ActivityRow; totalSteps: number; locationReady: boolean; onLocation: () => void; onTerritories: () => void }) {
   return <View>
@@ -201,6 +242,28 @@ function Metric({ value, label }: { value: string; label: string }) { return <Vi
 function NavButton({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) { return <Pressable style={styles.navButton} onPress={onPress}><View style={[styles.navMark, active && styles.navMarkActive]} /><Text style={[styles.navLabel, active && styles.navLabelActive]}>{label}</Text></Pressable>; }
 
 const styles = StyleSheet.create({
+  platformLanding: { paddingTop: 28, paddingBottom: 40, paddingHorizontal: 4 },
+  platformHero: { paddingTop: 12, paddingBottom: 28 },
+  platformEyebrow: { color: '#888', fontSize: 12, letterSpacing: 1.2, fontWeight: '600' },
+  platformTitle: { color: '#ffffff', fontSize: 34, lineHeight: 40, fontWeight: '700', marginTop: 12 },
+  platformCopy: { color: '#a1a1aa', fontSize: 15, lineHeight: 22, marginTop: 12, maxWidth: 340 },
+  platformPanel: { backgroundColor: 'transparent', padding: 0, marginTop: 8 },
+  googleButton: { minHeight: 52, backgroundColor: '#18181b', borderWidth: 1, borderColor: '#3f3f46', borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16, gap: 10 },
+  googleMark: { color: '#ffffff', fontSize: 18, fontWeight: '700' },
+  googleText: { color: '#ffffff', fontSize: 15, fontWeight: '600' },
+  divider: { flexDirection: 'row', alignItems: 'center', gap: 12, marginVertical: 20 },
+  dividerLine: { flex: 1, height: 1, backgroundColor: '#27272a' },
+  dividerText: { color: '#71717a', fontSize: 12, fontWeight: '500' },
+  platformInput: { height: 52, borderWidth: 1, borderColor: '#3f3f46', borderRadius: 12, color: '#ffffff', fontSize: 15, paddingHorizontal: 16, backgroundColor: '#18181b' },
+  emailButton: { minHeight: 52, marginTop: 12, backgroundColor: '#22c55e', borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+  emailButtonText: { color: '#052e16', fontSize: 15, fontWeight: '700' },
+  terms: { color: '#71717a', fontSize: 12, lineHeight: 18, marginTop: 16, textAlign: 'center' },
+  loginHint: { color: '#a1a1aa', fontSize: 13, marginTop: 16, textAlign: 'center' },
+  loginLink: { color: '#22c55e', fontWeight: '600' },
+  platformFooter: { marginTop: 32 },
+  footerBrand: { color: '#52525b', fontSize: 11, fontWeight: '600', letterSpacing: 1 },
+  footerNote: { color: '#3f3f46', fontSize: 11, marginTop: 4 },
+
   landing: { paddingTop: 30, paddingBottom: 32 }, landingIndex: { color: '#e6ff55', fontSize: 10, letterSpacing: 2.4, fontWeight: '800' }, landingTitle: { color: '#f3f3f0', fontSize: 52, lineHeight: 51, fontWeight: '900', letterSpacing: -2, marginTop: 18 }, landingCopy: { color: '#999991', fontSize: 16, lineHeight: 23, marginTop: 18, maxWidth: 330 }, landingRule: { height: 3, backgroundColor: '#2c2c2c', marginTop: 30, marginBottom: 10 }, landingRuleFill: { height: 3, width: '32%', backgroundColor: '#e6ff55' }, landingFeature: { flexDirection: 'row', borderBottomWidth: 1, borderColor: '#2c2c2c', paddingVertical: 17 }, landingFeatureNumber: { color: '#777', width: 42, fontSize: 11, fontWeight: '800' }, landingFeatureTitle: { color: '#f3f3f0', fontSize: 13, fontWeight: '900', letterSpacing: 1.4 }, landingFeatureText: { color: '#888880', fontSize: 13, marginTop: 4 }, signupCard: { borderWidth: 1, borderColor: '#414141', padding: 18, marginTop: 28, backgroundColor: '#111' }, signupLabel: { color: '#e6ff55', fontSize: 10, letterSpacing: 1.5, fontWeight: '900' }, signupNote: { color: '#777', fontSize: 10, marginTop: 12 }, platformLanding: { paddingTop: 12, paddingBottom: 30 }, platformHero: { paddingTop: 20, paddingBottom: 24 }, platformEyebrow: { color: '#777', fontSize: 9, letterSpacing: 2, fontWeight: '800' }, platformTitle: { color: '#f4f4ef', fontSize: 48, lineHeight: 48, fontWeight: '900', letterSpacing: -1.8, marginTop: 16 }, platformCopy: { color: '#9b9b93', fontSize: 15, lineHeight: 22, marginTop: 15, maxWidth: 340 }, platformStatRow: { flexDirection: 'row', justifyContent: 'space-between', borderTopWidth: 1, borderBottomWidth: 1, borderColor: '#303030', paddingVertical: 16, marginTop: 24 }, platformStat: { color: '#e6ff55', fontSize: 24, fontWeight: '900' }, platformStatLabel: { color: '#777', fontSize: 8, letterSpacing: 1, marginTop: 5 }, platformPanel: { backgroundColor: '#f3f3ee', padding: 18, marginTop: 10 }, panelTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }, panelTitle: { color: '#101010', fontSize: 13, fontWeight: '900', letterSpacing: 1.2 }, panelMeta: { color: '#65655f', fontSize: 9, letterSpacing: 1 }, googleButton: { minHeight: 52, backgroundColor: '#111', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14 }, googleMark: { color: '#e6ff55', fontSize: 19, fontWeight: '900', width: 28 }, googleText: { color: '#f4f4ef', fontSize: 11, fontWeight: '900', letterSpacing: .8, flex: 1 }, googleArrow: { color: '#e6ff55', fontSize: 19 }, divider: { flexDirection: 'row', alignItems: 'center', gap: 8, marginVertical: 17 }, dividerLine: { flex: 1, height: 1, backgroundColor: '#c5c5bf' }, dividerText: { color: '#76766e', fontSize: 8, letterSpacing: 1 }, platformInput: { height: 50, borderWidth: 1, borderColor: '#b5b5af', color: '#111', fontSize: 15, paddingHorizontal: 13, backgroundColor: '#fff' }, emailButton: { minHeight: 50, marginTop: 10, backgroundColor: '#e6ff55', paddingHorizontal: 14, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }, emailButtonText: { color: '#111', fontSize: 11, fontWeight: '900', letterSpacing: .8 }, emailArrow: { color: '#111', fontSize: 19 }, terms: { color: '#777', fontSize: 9, lineHeight: 14, marginTop: 14 }, loginHint: { color: '#555', fontSize: 11, textAlign: 'center', marginTop: 18 }, loginLink: { color: '#111', fontWeight: '900' }, platformFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingTop: 22 }, footerBrand: { color: '#eee', fontWeight: '900', fontSize: 11, letterSpacing: 1.5 }, footerNote: { color: '#666', fontSize: 8, letterSpacing: 1 },
   safe: { flex: 1, backgroundColor: '#0a0a0a' }, shell: { flex: 1, backgroundColor: '#0a0a0a' }, topbar: { paddingHorizontal: 22, paddingTop: 18, paddingBottom: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', borderBottomWidth: 1, borderBottomColor: '#252525' }, eyebrow: { color: '#777', fontSize: 10, letterSpacing: 2.2, fontWeight: '700' }, wordmark: { color: '#f3f3f0', fontSize: 22, letterSpacing: 1.8, fontWeight: '900', marginTop: 4 }, wordmarkLight: { color: '#777', fontWeight: '400' }, statusPill: { borderColor: '#3c3c3c', borderWidth: 1, paddingHorizontal: 9, paddingVertical: 6, flexDirection: 'row', alignItems: 'center', gap: 6 }, statusDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: '#e6ff55' }, statusText: { color: '#d9d9d3', fontSize: 9, letterSpacing: 1.5, fontWeight: '700' }, content: { paddingHorizontal: 22, paddingBottom: 40 }, hero: { paddingTop: 34, paddingBottom: 28 }, kicker: { color: '#888', fontSize: 10, fontWeight: '700', letterSpacing: 2.2 }, heroTitle: { color: '#f3f3f0', fontSize: 46, lineHeight: 48, fontWeight: '900', letterSpacing: -1.5, marginTop: 12, maxWidth: 340 }, heroCopy: { color: '#9b9b94', fontSize: 15, lineHeight: 22, marginTop: 16, maxWidth: 330 }, primaryButton: { backgroundColor: '#e6ff55', minHeight: 52, paddingHorizontal: 18, marginTop: 24, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }, primaryButtonText: { color: '#111', fontWeight: '900', letterSpacing: 1.1, fontSize: 12 }, buttonArrow: { color: '#111', fontSize: 22, fontWeight: '700' }, metricGrid: { borderTopWidth: 1, borderBottomWidth: 1, borderColor: '#303030', flexDirection: 'row', paddingVertical: 18, marginBottom: 30 }, metric: { flex: 1, borderRightWidth: 1, borderColor: '#303030', paddingLeft: 12 }, metricValue: { color: '#f5f5f0', fontSize: 18, fontWeight: '800' }, metricLabel: { color: '#73736d', fontSize: 8, letterSpacing: 1.2, marginTop: 7, lineHeight: 12 }, sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 13 }, sectionTitle: { color: '#f3f3f0', fontSize: 12, fontWeight: '800', letterSpacing: 1.3 }, sectionMeta: { color: '#74746e', fontSize: 11 }, note: { borderWidth: 1, borderColor: '#333', flexDirection: 'row', padding: 16, backgroundColor: '#111' }, noteNumber: { color: '#e6ff55', fontSize: 12, fontWeight: '900', width: 38 }, noteBody: { flex: 1 }, noteTitle: { color: '#f3f3f0', fontSize: 18, fontWeight: '800' }, noteCopy: { color: '#96968e', fontSize: 13, lineHeight: 19, marginTop: 7 }, outlineButton: { borderWidth: 1, borderColor: '#777', minHeight: 50, paddingHorizontal: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16 }, outlineButtonText: { color: '#f3f3f0', fontSize: 11, fontWeight: '800', letterSpacing: 1.1 }, outlineArrow: { color: '#e6ff55', fontSize: 20 }, pageTitle: { color: '#f3f3f0', fontSize: 38, lineHeight: 42, fontWeight: '900', letterSpacing: -1, marginTop: 10 }, pageCopy: { color: '#999991', fontSize: 14, lineHeight: 21, marginTop: 12, marginBottom: 22 }, mapFrame: { height: 230, borderWidth: 1, borderColor: '#3b3b3b', backgroundColor: '#101010', overflow: 'hidden', position: 'relative', marginBottom: 20 }, mapGrid: { ...StyleSheet.absoluteFill, opacity: 0.6, backgroundColor: '#131313', borderWidth: 1, borderColor: '#252525' }, mapCenter: { position: 'absolute', left: '45%', top: '42%', alignItems: 'center' }, mapLabel: { color: '#e6ff55', fontSize: 8, letterSpacing: 1.4, marginBottom: 7 }, positionDot: { width: 14, height: 14, borderRadius: 7, backgroundColor: '#e6ff55', borderWidth: 4, borderColor: '#354000' }, territoryRow: { flexDirection: 'row', alignItems: 'center', borderTopWidth: 1, borderColor: '#2b2b2b', paddingVertical: 17 }, territoryIndex: { width: 34 }, territoryIndexText: { color: '#777', fontSize: 11, fontWeight: '700' }, territoryInfo: { flex: 1 }, territoryName: { color: '#f3f3f0', fontWeight: '800', fontSize: 16 }, territoryMeta: { color: '#777', fontSize: 9, letterSpacing: 1, marginTop: 5 }, progressLine: { height: 3, backgroundColor: '#333', marginTop: 12, marginRight: 20 }, progressFill: { height: 3, backgroundColor: '#e6ff55' }, progressText: { color: '#787870', fontSize: 8, letterSpacing: 1, marginTop: 5 }, smallButton: { borderWidth: 1, borderColor: '#555', paddingHorizontal: 12, paddingVertical: 10 }, smallButtonText: { color: '#e6ff55', fontSize: 10, fontWeight: '900', letterSpacing: 1 }, chart: { borderWidth: 1, borderColor: '#333', padding: 18, marginTop: 24, backgroundColor: '#101010' }, chartHeader: { flexDirection: 'row', alignItems: 'baseline', gap: 9 }, chartValue: { color: '#e6ff55', fontSize: 30, fontWeight: '900' }, chartLabel: { color: '#777', fontSize: 9, letterSpacing: 1.4 }, bars: { height: 180, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', marginTop: 20 }, barColumn: { flex: 1, alignItems: 'center', height: '100%', justifyContent: 'flex-end' }, barTrack: { height: '88%', width: 18, justifyContent: 'flex-end', backgroundColor: '#191919' }, bar: { width: '100%', backgroundColor: '#f3f3f0' }, barLabel: { color: '#777', fontSize: 8, marginTop: 9, letterSpacing: 1 }, trendCard: { padding: 18, marginTop: 16, backgroundColor: '#e6ff55' }, trendTitle: { color: '#111', fontSize: 22, fontWeight: '900', marginTop: 8 }, trendCopy: { color: '#424800', fontSize: 13, lineHeight: 19, marginTop: 8 }, profileCard: { borderWidth: 1, borderColor: '#333', padding: 18, marginTop: 22, backgroundColor: '#111' }, profileTag: { color: '#e6ff55', fontSize: 10, fontWeight: '800', letterSpacing: 1.5 }, input: { height: 50, borderBottomWidth: 1, borderColor: '#666', color: '#f3f3f0', fontSize: 16, marginTop: 15 }, signedInText: { color: '#aaa', fontSize: 14, lineHeight: 21, marginTop: 18 }, privacyNote: { color: '#666', fontSize: 11, lineHeight: 17, marginTop: 20 }, nav: { borderTopWidth: 1, borderColor: '#2b2b2b', height: 74, paddingHorizontal: 12, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', backgroundColor: '#0b0b0b' }, navButton: { alignItems: 'center', paddingHorizontal: 12, gap: 7 }, navMark: { width: 20, height: 2, backgroundColor: '#444' }, navMarkActive: { backgroundColor: '#e6ff55', width: 26 }, navLabel: { color: '#676760', fontSize: 9, letterSpacing: 1.5, fontWeight: '700' }, navLabelActive: { color: '#f3f3f0' },
 });
