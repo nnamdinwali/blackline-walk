@@ -139,13 +139,22 @@ export default function App() {
     <SafeAreaView style={styles.safe}>
       <StatusBar style="light" />
       <View style={styles.shell}>
-        <View style={styles.topbar}>
-          <View>
-            <Text style={styles.eyebrow}>BLACKLINE / FIELD 01</Text>
-            <Text style={styles.wordmark}>WALK <Text style={styles.wordmarkLight}>THE LINE</Text></Text>
+        {signedIn && (
+
+          <View style={styles.topbar}>
+
+            <View>
+
+              <Text style={styles.eyebrow}>Blackline</Text>
+
+              <Text style={styles.wordmark}>Walk the line</Text>
+
+            </View>
+
           </View>
-          <View style={styles.statusPill}><View style={styles.statusDot} /><Text style={styles.statusText}>{locationReady ? 'LIVE' : 'READY'}</Text></View>
-        </View>
+
+        )}
+
 
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
           {!signedIn ? <LandingScreen email={sessionEmail} setEmail={setSessionEmail} busy={authBusy} onGoogle={signInWithGoogle} onSignUp={sendMagicLink} /> : <>
@@ -170,47 +179,42 @@ export default function App() {
 function LandingScreen({ email, setEmail, busy, onGoogle, onSignUp }: { email: string; setEmail: (value: string) => void; busy: boolean; onGoogle: () => void; onSignUp: () => void }) {
   return (
     <View style={styles.platformLanding}>
-      <View style={styles.platformHero}>
-        <Text style={styles.platformEyebrow}>BLACKLINE</Text>
-        <Text style={styles.platformTitle}>Walk more.{"\n"}Own the miles.</Text>
-        <Text style={styles.platformCopy}>
-          Turn daily movement into territory you can claim. Walk, hold for three days, and keep what you earn.
-        </Text>
+      <Text style={styles.platformEyebrow}>Blackline</Text>
+      <Text style={styles.platformTitle}>Walk more.{"\n"}Own the miles.</Text>
+      <Text style={styles.platformCopy}>
+        Turn daily movement into territory you can claim. Walk, hold for three days, and keep what you earn.
+      </Text>
+
+      <Pressable style={styles.googleButton} onPress={onGoogle} disabled={busy}>
+        <Text style={styles.googleText}>{busy ? "Connecting…" : "Continue with Google"}</Text>
+      </Pressable>
+
+      <View style={styles.divider}>
+        <View style={styles.dividerLine} />
+        <Text style={styles.dividerText}>or</Text>
+        <View style={styles.dividerLine} />
       </View>
 
-      <View style={styles.platformPanel}>
-        <Pressable style={styles.googleButton} onPress={onGoogle} disabled={busy}>
-          <Text style={styles.googleMark}>G</Text>
-          <Text style={styles.googleText}>{busy ? "Connecting…" : "Continue with Google"}</Text>
-        </Pressable>
+      <TextInput
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
+        placeholder="Email address"
+        placeholderTextColor="#52525b"
+        style={styles.platformInput}
+      />
 
-        <View style={styles.divider}>
-          <View style={styles.dividerLine} />
-          <Text style={styles.dividerText}>OR</Text>
-          <View style={styles.dividerLine} />
-        </View>
+      <Pressable style={styles.emailButton} onPress={onSignUp} disabled={busy}>
+        <Text style={styles.emailButtonText}>{busy ? "Sending…" : "Continue"}</Text>
+      </Pressable>
 
-        <TextInput
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          keyboardType="email-address"
-          placeholder="Email address"
-          placeholderTextColor="#666"
-          style={styles.platformInput}
-        />
-
-        <Pressable style={styles.emailButton} onPress={onSignUp} disabled={busy}>
-          <Text style={styles.emailButtonText}>{busy ? "Sending…" : "Continue"}</Text>
-        </Pressable>
-
-        <Text style={styles.terms}>
-          By continuing you agree to Blackline terms and privacy policy.
-        </Text>
-        <Text style={styles.loginHint}>
-          Already have an account? <Text style={styles.loginLink}>Sign in</Text>
-        </Text>
-      </View>
+      <Text style={styles.terms}>
+        By continuing you agree to the terms and privacy policy.
+      </Text>
+      <Text style={styles.loginHint}>
+        Already have an account? <Text style={styles.loginLink}>Sign in</Text>
+      </Text>
     </View>
   );
 }
@@ -242,6 +246,24 @@ function Metric({ value, label }: { value: string; label: string }) { return <Vi
 function NavButton({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) { return <Pressable style={styles.navButton} onPress={onPress}><View style={[styles.navMark, active && styles.navMarkActive]} /><Text style={[styles.navLabel, active && styles.navLabelActive]}>{label}</Text></Pressable>; }
 
 const styles = StyleSheet.create({
+  platformLanding: { paddingTop: 56, paddingBottom: 40, paddingHorizontal: 8 },
+  platformEyebrow: { color: '#71717a', fontSize: 13, fontWeight: '500', marginBottom: 8 },
+  platformTitle: { color: '#fafafa', fontSize: 36, lineHeight: 42, fontWeight: '700', letterSpacing: -0.5 },
+  platformCopy: { color: '#a1a1aa', fontSize: 16, lineHeight: 24, marginTop: 14, marginBottom: 36, maxWidth: 340 },
+  googleButton: { minHeight: 52, backgroundColor: '#18181b', borderWidth: 1, borderColor: '#3f3f46', borderRadius: 12, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16 },
+  googleText: { color: '#fafafa', fontSize: 15, fontWeight: '600' },
+  divider: { flexDirection: 'row', alignItems: 'center', gap: 12, marginVertical: 22 },
+  dividerLine: { flex: 1, height: 1, backgroundColor: '#27272a' },
+  dividerText: { color: '#71717a', fontSize: 13 },
+  platformInput: { height: 52, borderWidth: 1, borderColor: '#3f3f46', borderRadius: 12, color: '#fafafa', fontSize: 16, paddingHorizontal: 16, backgroundColor: '#18181b', marginBottom: 12 },
+  emailButton: { minHeight: 52, backgroundColor: '#22c55e', borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+  emailButtonText: { color: '#052e16', fontSize: 16, fontWeight: '700' },
+  terms: { color: '#52525b', fontSize: 12, lineHeight: 18, marginTop: 20, textAlign: 'center' },
+  loginHint: { color: '#a1a1aa', fontSize: 14, marginTop: 18, textAlign: 'center' },
+  loginLink: { color: '#22c55e', fontWeight: '600' },
+  eyebrow: { color: '#71717a', fontSize: 12, fontWeight: '500' },
+  wordmark: { color: '#fafafa', fontSize: 20, fontWeight: '700', marginTop: 2 },
+
   platformLanding: { paddingTop: 28, paddingBottom: 40, paddingHorizontal: 4 },
   platformHero: { paddingTop: 12, paddingBottom: 28 },
   platformEyebrow: { color: '#888', fontSize: 12, letterSpacing: 1.2, fontWeight: '600' },
